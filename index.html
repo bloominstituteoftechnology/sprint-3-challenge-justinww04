@@ -59,6 +59,51 @@
       // ❗ WARNING: except for `getAllReversed`, methods must respect the order of the integers
       // ❗ WARNING: note that none of the methods actually mutate the `ints` property
 
+         constructor(...args) {
+       this.ints = args.filter(Number.isInteger);
+        }
+
+        filter(callback) {
+          return this.ints.filter(callback)
+        }
+
+        map(callback) {
+          return this.ints.map(callback)
+        }
+
+        getAll() {
+        return [...this.ints]
+         }
+
+         getEvens() {
+          return this.filter((num) => num % 2 === 0)
+         }
+
+         getNegatives() {
+          return this.filter((num) => num < 0)
+         }
+
+         getAllSquared () {
+          return this.map((num) => num * num)
+         }
+
+        pop() {
+          return this.ints.length? this.ints.pop() : undefined
+        }
+
+        push(num) {
+          if  (Number.isInteger(num)) this.ints.push(num)
+          return [...this.ints];
+        }
+
+        getEveryNth(n) {
+            return n > 0 ? this.filter((_,i) => i % n === 0) : []
+        }
+
+        getAllReversed() {
+          return [...this.ints].reverse()
+        }
+
     }
 
     // 👉 CHALLENGE 2 NerfGun
@@ -77,8 +122,33 @@
       //      * When disengaging the safety, return "Safety disabled!"
       // 🌟 HINT: instances need to keep track of their maximum capacity as well as their current capacity
 
-    }
 
+         constructor(totalProjectiles) {
+         this.capacity = this.ammo = totalProjectiles;
+         this.safetyOn = true;
+        }
+
+         shoot() {
+         if (!this.safetyOn && this.ammo > 0) {
+         this.ammo--;
+         return "Bang!";
+        }
+         return "Click!";
+        }
+
+         reload(number) {
+         if (typeof number === 'number' && number > 0) {
+         this.ammo = Math.min(this.capacity, this.ammo + number);
+         return `${this.ammo} projectiles left!`;
+        }
+         return "Error reloading!";
+        }
+
+         toggleSafety() {
+         this.safetyOn = !this.safetyOn;
+         return this.safetyOn ? "Safety enabled!" : "Safety disabled!";
+        }
+        }
     // 👉 CHALLENGE 3 EBook
     class EBook {
       // 🧠 Constructor takes two arguments:
@@ -96,7 +166,23 @@
       // 🌟 HINT: remember about the `slice` method which strings and arrays have
       // ❗ Feel free to implement `back`, although this is not required nor graded
 
-    }
+             constructor(text, charactersonpage) {
+             this.text = text;
+             this.pagecharacters = charactersonpage; 
+             this.bookPage = 0;
+                  }
+
+             next() {
+             if (this.bookPage >= this.text.length) {
+             return null;
+                          }
+
+             const page = this.text.slice(this.bookPage, this.bookPage + this.pagecharacters);
+             this.bookPage += this.pagecharacters;
+
+             return page;
+            }
+                }
 
     // 👉 CHALLENGE 4 AntFarm
     class AntFarm {
@@ -131,7 +217,42 @@
       // 👉 HINT: if you are not feeling confident with map and filter, solve the problem with for loops,
       //      and with the piece of mind of all tests passing, refactor to use map/filter
 
-    }
+               constructor(...antNames) {
+              this.ants = antNames.map(name => ({ name, health: 100 }));
+            }
+
+               work() {
+                if (this.ants.length === 0) {
+                return "No ants here. Did you work them to death?";
+              }
+
+                const initialAntCount = this.ants.length;
+
+                 this.ants = this.ants.map(ant => {
+              ant.health -= 20;
+                return ant;
+               }).filter(ant => ant.health > 0);
+
+               return `${initialAntCount} ants starting work!`;
+                }
+
+                feed(antName) {
+                    let fedAnt = false;
+
+                 this.ants.forEach(ant => {
+                  if (ant.name === antName) {
+                 ant.health += 15;
+                  fedAnt = true;
+                }
+                 });
+
+                 if (fedAnt) {
+                    return "Yum!";
+                  } else {
+                 return `${antName} not found!`;
+                   }
+                   }
+                   }
 
     // 🧪 TESTS, do not make any changes below this line ===================
     // 🧪 TESTS, do not make any changes below this line ===================
